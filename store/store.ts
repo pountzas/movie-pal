@@ -11,9 +11,10 @@ export const useMovieStore = create<MovieStore>()(
       page: 1,
       hasMore: true,
       loading: false,
+      error: null,
 
       fetchMovies: async () => {
-        const { loading, hasMore, page, movies } = get();
+        const { loading, hasMore, page, movies, error } = get();
 
         if (loading || !hasMore) return;
 
@@ -25,10 +26,11 @@ export const useMovieStore = create<MovieStore>()(
           set({
             movies: [...movies, ...data.results],
             page: page + 1,
-            hasMore: page < data.total_pages
+            hasMore: page < data.total_pages,
+            error: null
           });
         } catch (error) {
-          console.error("Failed to fetch movies:", error);
+          set({ error: "Failed to fetch movies" });
         } finally {
           set({ loading: false });
         }
@@ -39,7 +41,8 @@ export const useMovieStore = create<MovieStore>()(
           movies: [],
           page: 1,
           hasMore: true,
-          loading: false
+          loading: false,
+          error: null
         });
       }
     }),
@@ -80,9 +83,16 @@ export const useMovieSearchStore = create<MovieSearchStore>((set, get) => ({
   hasMore: true,
   loadingSearchedMovies: false,
   query: "",
+  searchError: null,
 
   fetchSearchedMovies: async (query: string) => {
-    const { loadingSearchedMovies, hasMore, page, searchedMovies } = get();
+    const {
+      loadingSearchedMovies,
+      hasMore,
+      page,
+      searchedMovies,
+      searchError
+    } = get();
 
     if (loadingSearchedMovies || !hasMore) return;
 
@@ -94,10 +104,13 @@ export const useMovieSearchStore = create<MovieSearchStore>((set, get) => ({
       set({
         searchedMovies: [...searchedMovies, ...data.results],
         page: page + 1,
-        hasMore: page < data.total_pages
+        hasMore: page < data.total_pages,
+        searchError: null
       });
     } catch (error) {
-      console.error("Failed to fetch searchedMovies:", error);
+      set({
+        searchError: "Failed to fetch searched movies"
+      });
     } finally {
       set({ loadingSearchedMovies: false });
     }
@@ -109,7 +122,8 @@ export const useMovieSearchStore = create<MovieSearchStore>((set, get) => ({
       page: 1,
       hasMore: true,
       loadingSearchedMovies: false,
-      query: ""
+      query: "",
+      searchError: null
     });
   }
 }));

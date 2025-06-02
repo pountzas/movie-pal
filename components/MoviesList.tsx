@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useMovieStore, useMovieSearchStore } from "../store/store";
 import ArrowUp from "../assets/icons/ArrowUp";
 import MovieItem from "./MovieItem";
 
 const MoviesList = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const { movies, fetchMovies, loading } = useMovieStore();
-  const { searchedMovies, loadingSearchedMovies, query } =
+  const { movies, fetchMovies, loading, error } = useMovieStore();
+  const { searchedMovies, loadingSearchedMovies, query, searchError } =
     useMovieSearchStore();
   const flatRef = useRef<FlatList>(null);
 
@@ -43,32 +43,48 @@ const MoviesList = () => {
           <ArrowUp outerFill="gray" innerFill="black" />
         </TouchableOpacity>
       )}
-      <FlatList
-        ref={flatRef}
-        className="space-x-1"
-        data={query.length ? searchedMovies : movies}
-        fadingEdgeLength={20}
-        key={"movies-list"}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={2}
-        onEndReached={handleOnEndReached}
-        onEndReachedThreshold={0.15}
-        renderItem={({ item }) => <MovieItem movie={item} />}
-        onRefresh={() => {
-          useMovieSearchStore.getState().reset();
-          useMovieStore.getState().reset();
-          fetchMovies();
-        }}
-        refreshing={loading || loadingSearchedMovies}
-        columnWrapperStyle={{
-          justifyContent: "space-between",
-          marginBottom: 70
-        }}
-        columnWrapperClassName="space-x-4"
-        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-      />
+      {error && (
+        <View className="px-6">
+          <Text className="text-lg text-gray-800 dark:text-gray-400">
+            Error: {error}
+          </Text>
+        </View>
+      )}
+      {searchError && (
+        <View className="px-6">
+          <Text className="text-lg text-gray-800 dark:text-gray-400">
+            Search Error:{searchError}
+          </Text>
+        </View>
+      )}
+      {!error && (
+        <FlatList
+          ref={flatRef}
+          className="space-x-1"
+          data={query.length ? searchedMovies : movies}
+          fadingEdgeLength={20}
+          key={"movies-list"}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={2}
+          onEndReached={handleOnEndReached}
+          onEndReachedThreshold={0.15}
+          renderItem={({ item }) => <MovieItem movie={item} />}
+          onRefresh={() => {
+            useMovieSearchStore.getState().reset();
+            useMovieStore.getState().reset();
+            fetchMovies();
+          }}
+          refreshing={loading || loadingSearchedMovies}
+          columnWrapperStyle={{
+            justifyContent: "space-between",
+            marginBottom: 70
+          }}
+          columnWrapperClassName="space-x-4"
+          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+        />
+      )}
     </View>
   );
 };

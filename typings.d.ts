@@ -20,6 +20,7 @@ interface MovieStore {
   page: number;
   hasMore: boolean;
   loading: boolean;
+  error: string | null;
   fetchMovies: () => Promise<void>;
   reset: () => void;
 }
@@ -30,6 +31,7 @@ interface MovieSearchStore {
   hasMore: boolean;
   loadingSearchedMovies: boolean;
   query: string;
+  searchError: string | null;
   fetchSearchedMovies: (query: string) => Promise<void>;
   reset: () => void;
 }
