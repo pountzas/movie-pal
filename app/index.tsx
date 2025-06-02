@@ -1,15 +1,38 @@
-import { Text, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { colorScheme, useColorScheme } from "nativewind";
+import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
-export default function Index() {
+import "../global.css";
+import { Switch, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import Search from "@/components/Search";
+import MoviesList from "@/components/MoviesList";
+
+colorScheme.set("system");
+
+export default function App() {
+  const { colorScheme, toggleColorScheme } = useColorScheme();
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => {
+    toggleColorScheme();
+    setIsEnabled(!isEnabled);
+  };
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
+    <SafeAreaProvider>
+      <SafeAreaView className="dark h-full bg-gray-100 dark:bg-gray-900 dark:text-gray-50">
+        <View className="mx-4 my-5 flex flex-row items-center justify-between">
+          <Search />
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={isEnabled}
+          />
+        </View>
+        <MoviesList />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
