@@ -3,7 +3,6 @@ import { persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getMoviesByTitle } from "../actions/getMoviesByTitle";
 import { getMoviesByPopularity } from "../actions/getMoviesByPopularity";
-import { MovieSearchStore, MovieStore } from "@/typings";
 
 export const useMovieStore = create<MovieStore>()(
   persist(

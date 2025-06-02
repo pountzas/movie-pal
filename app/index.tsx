@@ -1,9 +1,8 @@
-import { StatusBar } from "expo-status-bar";
 import { colorScheme, useColorScheme } from "nativewind";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
 import "../global.css";
-import { Switch, Text, TouchableOpacity, View } from "react-native";
+import { Switch, View } from "react-native";
 import { useState } from "react";
 import Search from "@/components/Search";
 import MoviesList from "@/components/MoviesList";
@@ -20,7 +19,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView className="dark h-full bg-gray-100 dark:bg-gray-900 dark:text-gray-50">
+      <SafeAreaView className="dark h-full bg-gray-300 dark:bg-gray-900 dark:text-gray-50">
         <View className="mx-4 my-5 flex flex-row items-center justify-between">
           <Search />
           <Switch

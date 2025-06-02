@@ -1,13 +1,12 @@
 import { useRouter } from "expo-router";
 import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
-import { Movie } from "../typings";
 
 const MovieItem = ({ movie }: { movie: Movie }) => {
   const router = useRouter();
   const handlePress = () => {
     router.push({
       pathname: "/MovieDetailsScreen",
-      params: { ...movie }
+      params: { ...(movie as any) }
     });
   };
 
@@ -15,7 +14,7 @@ const MovieItem = ({ movie }: { movie: Movie }) => {
     <View className="flex flex-col items-center">
       <TouchableOpacity
         onPress={handlePress}
-        className="h-[275px] w-[150px] rounded"
+        className="h-[265px] w-[150px] rounded"
       >
         <ImageBackground
           borderRadius={16}
