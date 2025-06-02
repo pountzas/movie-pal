@@ -114,6 +114,7 @@ The app provides user-friendly error handling for all network and data-fetching 
 - User authentication and personalized watchlists
 - Add cast and crew details in movie detail view (need to call differt API endpoint)
 - Add more details in movie detail view (e.g., ratings, reviews, movie length)
+- Add gestures for swipe back
 
 ---
 
