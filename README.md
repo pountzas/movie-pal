@@ -1,50 +1,126 @@
-# Welcome to your Expo app 👋
+# MoviePal
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native (Expo) app that fetches and displays movies from The Movie Database (TMDb) API in a clean, scrollable dashboard, with offline support, search, dark mode, and user-friendly error handling.
 
-## Get started
+---
 
-1. Install dependencies
+## 🚀 Setup Instructions
 
-   ```bash
-   npm install
-   ```
+### Prerequisites
 
-2. Start the app
+- [Node.js](https://nodejs.org/) (v16+ recommended)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- [Git](https://git-scm.com/) (if cloning from GitHub)
+- TMDb API Key (set as `EXPO_PUBLIC_TMDB_API_KEY` in your environment)
+  ```https://developer.themoviedb.org/docs/getting-started```
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### 1. Clone the Repository
 
 ```bash
-npm run reset-project
+git clone https://github.com/your-username/movie-pal.git
+cd movie-pal
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Install Dependencies
 
-## Learn more
+```bash
+npm install
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### 3. Start the App
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npx expo start
+```
 
-## Join the community
+- Scan the QR code with the Expo Go app (iOS/Android) or run on an emulator or press `a` for Android or `i` for iOS in the terminal.
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 🛠 Tech Stack and Libraries Used
+
+- **React Native (Expo):** Rapid cross-platform development.
+- **Zustand:** Lightweight, scalable state management.
+- **Nativewind:** Utility-first styling for React Native.
+- **AsyncStorage:** Local data persistence and offline support.
+- **React Navigation (expo-router):** Seamless screen transitions and navigation.
+- **TMDb API:** Public movie data source.
+
+**Why these choices?**
+
+- **Zustand** is simple, fast, and easy to persist for offline support.
+- **Nativewind** enables rapid, modern UI development.
+- **AsyncStorage** provides robust offline caching with minimal setup.
+
+---
+
+## 🏗 Architecture & Folder Structure Overview
+
+```
+/src
+  /actions      # API calls and data fetching logic
+  /components   # Reusable UI components (Card, Search, List, etc.)
+  /store        # Zustand store setup and logic
+  /app          # App screens (Dashboard, Detail)
+  /assets       # Icons, images, fonts
+  /utils        # Utility functions/helpers
+/App.js         # Entry point
+```
+
+**Rationale:**
+The project uses a feature-based structure for scalability and maintainability. Shared logic and UI are separated for reusability and clarity.
+
+---
+
+## ⚖️ Trade-offs or Known Issues
+
+- **Time vs. Complexity:** Focused on core requirements and clean UI, some bonus features (e.g., advanced animations, exhaustive tests) have not been done due to time constraints.
+- **UI bug:** When the device is by default in dark mode, the notification bar's icons are set to dark icons making the almost invisible, but if you toggle the the theme to light and then back to dark, the icons get the correct color.
+
+---
+
+## 📝 Workflow Description
+
+- **Approach:**
+
+  1. Broke down requirements into tasks (API integration, UI, navigation, offline support).
+  2. Set up the project structure and installed dependencies.
+  3. Built the dashboard and detail screens with loading/error states.
+  4. Added offline caching and user feedback.
+  5. Polished UI and added optional features as time allowed.
+
+- **Tools Used:**
+
+  - **Version Control:** Git & GitHub
+  - **Debugging:** React Native Debugger, Expo DevTools
+
+- **Feature Validation:**
+  - Manual testing on Android/iOS devices and emulators.
+
+---
+
+## 🛡 Error Handling
+
+The app provides user-friendly error handling for all network and data-fetching operations. If an error occurs while fetching movies or search results (such as a network failure or API error), a clear error message is displayed at the top of the list. Users are informed of the issue and can retry the operation using a provided button. This ensures a smooth user experience and prevents silent failures.
+
+---
+
+## 🌱 Future Enhancements
+
+- Improved performance optimizations (e.g., image caching, background sync)
+- Enhanced UI/UX polish and animations
+- Testing
+- Extended filtering, search, and sorting options
+- User authentication and personalized watchlists
+- Add cast and crew details in movie detail view (need to call differt API endpoint)
+- Add more details in movie detail view (e.g., ratings, reviews, movie length)
+
+---
+
+## 📄 License
+
+[MIT](LICENSE) (or your preferred license)
+
+---
+
+**Feel free to reach out for any questions or suggestions!**
