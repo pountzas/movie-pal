@@ -14,6 +14,7 @@ const MoviesList = () => {
   useEffect(() => {
     if (movies.length === 0) fetchMovies();
     console.log("MoviesList rendered", movies.length);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOnEndReached = () => {
@@ -38,7 +39,7 @@ const MoviesList = () => {
               flatRef.current.scrollToOffset({ animated: true, offset: 0 });
             }
           }}
-          className="absolute bottom-28 z-10 flex w-full flex-row items-center justify-center opacity-75"
+          className="flex absolute bottom-28 z-10 flex-row justify-center items-center w-full opacity-75"
         >
           <ArrowUp outerFill="gray" innerFill="black" />
         </TouchableOpacity>

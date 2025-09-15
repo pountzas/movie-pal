@@ -1,10 +1,29 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
+import axios from "axios";
+
 const MovieDetailsScreen = () => {
   const movie = useLocalSearchParams();
   const router = useRouter();
+
+  const [cast, setCast] = useState([]);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // useEffect(() => {
+  //   mediaDetails();
+  //   console.log("MovieDetailsScreen rendered555", movie);
+  // }, []);
+  const mediaDetails = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${process.env.EXPO_PUBLIC_TMDB_API_KEY}`
+      );
+      setCast(response.data.cast);
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+    }
+  };
 
   return (
     <View className="h-full bg-gray-200 dark:bg-gray-900">
@@ -18,15 +37,18 @@ const MovieDetailsScreen = () => {
         />
         <TouchableOpacity
           onPress={() => router.back()}
-          className="absolute z-10 px-3 py-1 bg-black rounded-full opacity-60 top-8 left-4"
+          className="absolute left-4 top-8 z-10 px-3 py-1 bg-black rounded-full opacity-60"
         >
           <Text className="text-lg text-white">Back</Text>
         </TouchableOpacity>
       </View>
 
-      <View className="px-8 ">
+      <View className="px-8">
         <Text className="mt-6 text-3xl font-semibold dark:text-gray-50">
           {movie.title}
+        </Text>
+        <Text className="mt-2 text-gray-500 dark:text-gray-400">
+          {movie.release_date.slice(0, 4)}
         </Text>
         <Text
           numberOfLines={isExpanded ? undefined : 4}
@@ -39,6 +61,25 @@ const MovieDetailsScreen = () => {
             {isExpanded ? "Show Less" : "Read More"}
           </Text>
         </TouchableOpacity>
+
+        <View className="mt-4">
+          <Text className="text-3xl text-gray-500 dark:text-gray-400">
+            Cast:
+          </Text>
+          <View className="flex flex-row">
+            {cast.map((actor: any) => (
+              <View key={actor.id}>
+                <Image
+                  source={{
+                    uri: `https://www.themoviedb.org/t/p/w220_and_h330_face${actor.profile_path}`
+                  }}
+                  className="w-10 h-10 rounded-full"
+                />
+                <Text>{actor.name}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
       </View>
     </View>
   );
