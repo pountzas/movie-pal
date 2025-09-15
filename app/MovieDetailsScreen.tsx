@@ -1,6 +1,6 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const MovieDetailsScreen = () => {
@@ -10,10 +10,12 @@ const MovieDetailsScreen = () => {
   const [cast, setCast] = useState([]);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // useEffect(() => {
-  //   mediaDetails();
-  //   console.log("MovieDetailsScreen rendered555", movie);
-  // }, []);
+  useEffect(() => {
+    mediaDetails();
+    console.log("MovieDetailsScreen rendered555", movie);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const mediaDetails = async () => {
     try {
       const response = await axios.get(
@@ -66,19 +68,21 @@ const MovieDetailsScreen = () => {
           <Text className="text-3xl text-gray-500 dark:text-gray-400">
             Cast:
           </Text>
-          <View className="flex flex-row">
+          <ScrollView className="space-x-2" horizontal>
             {cast.map((actor: any) => (
-              <View key={actor.id}>
+              <View key={actor.id} className="mr-4">
                 <Image
                   source={{
                     uri: `https://www.themoviedb.org/t/p/w220_and_h330_face${actor.profile_path}`
                   }}
-                  className="w-10 h-10 rounded-full"
+                  className="w-40 h-40 rounded-full"
                 />
-                <Text>{actor.name}</Text>
+                <Text className="pt-1 text-lg text-gray-500 dark:text-gray-300">
+                  {actor.name}
+                </Text>
               </View>
             ))}
-          </View>
+          </ScrollView>
         </View>
       </View>
     </View>
