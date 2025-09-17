@@ -65,7 +65,7 @@ const MovieDetailsScreen = () => {
         </TouchableOpacity>
 
         <View className="mt-4">
-          <Text className="text-3xl text-gray-500 dark:text-gray-400">
+          <Text className="mb-2 text-2xl text-gray-500 dark:text-gray-400">
             Cast:
           </Text>
           <ScrollView className="space-x-2" horizontal>
