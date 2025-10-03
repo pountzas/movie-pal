@@ -1,0 +1,223 @@
+# Cursor's Project Intelligence - MoviePal
+
+## Project Overview
+
+MoviePal is a React Native (Expo) movie discovery app that fetches data from TMDb API. It features offline support, search, dark mode, and clean UI design.
+
+## Key Technical Patterns
+
+### State Management
+
+- **Zustand with Persistence**: Use `persist` middleware for offline storage
+- **Separate Stores**: Keep movie browsing and search in separate stores
+- **AsyncStorage Integration**: Custom storage functions for error handling
+- **Store Structure**: Actions return promises, state includes loading/error flags
+
+### Component Architecture
+
+- **Functional Components**: Always use functional components with hooks
+- **Expo Router**: File-based routing in `app/` directory
+- **Nativewind Styling**: Use Tailwind utility classes, `dark:` prefix for themes
+- **SafeAreaView**: Always wrap content in SafeAreaProvider/SafeAreaView
+
+### API Integration
+
+- **Axios Configuration**: Use environment variables for API keys
+- **Error Handling**: Check response status, data structure, and throw descriptive errors
+- **Pagination**: Handle page-based pagination with `hasMore` flags
+- **Type Safety**: Define interfaces in `typings.d.ts`
+
+### Development Workflow
+
+- **Expo Commands**: Use `npx expo start` for development
+- **Platform Testing**: Test on iOS, Android, and Web regularly
+- **Environment Setup**: TMDb API key required as `EXPO_PUBLIC_TMDB_API_KEY`
+
+## OTA Updates Pattern
+
+```typescript
+// Proper OTA update handling in _layout.tsx
+import * as Updates from "expo-updates";
+
+useEffect(() => {
+  // Handle update errors gracefully without crashing
+  Updates.addListener((event) => {
+    if (event.type === Updates.UpdateEventType.ERROR) {
+      console.warn("Update error:", event.message);
+    }
+  });
+
+  // Check for updates but don't block app launch
+  Updates.checkForUpdateAsync()
+    .then((update) => {
+      if (update.isAvailable) {
+        return Updates.fetchUpdateAsync();
+      }
+    })
+    .then((update) => {
+      if (update?.isNew) {
+        Updates.reloadAsync();
+      }
+    })
+    .catch((error) => {
+      console.warn("Update check failed:", error.message);
+      // Silently handle errors - don't crash the app
+    });
+}, []);
+```
+
+## Common Patterns & Solutions
+
+### Dark Mode Implementation
+
+```typescript
+// Theme detection and switching
+const { colorScheme, toggleColorScheme } = useColorScheme();
+colorScheme.set("system"); // Initialize in component
+```
+
+### Store Pattern
+
+```typescript
+// Zustand store with persistence
+export const useStore = create<StoreType>()(
+  persist(
+    (set, get) => ({
+      // State and actions
+    }),
+    {
+      name: "store-name",
+      storage: customStorage // AsyncStorage wrapper
+    }
+  )
+);
+```
+
+### API Error Handling
+
+```typescript
+try {
+  const response = await axios.get(url, { params });
+  if (response.status !== 200) throw new Error(`HTTP ${response.status}`);
+  if (!response.data?.results) throw new Error("Invalid response structure");
+  return response.data;
+} catch (error) {
+  throw new Error("User-friendly error message");
+}
+```
+
+### Component Structure
+
+```typescript
+// Screen component pattern
+export default function ScreenName() {
+  // Hooks at top
+  const { data, loading, error } = useStore();
+
+  // Early returns for loading/error states
+  if (loading) return <LoadingComponent />;
+  if (error) return <ErrorComponent error={error} />;
+
+  // Main render
+  return (
+    <SafeAreaView className="flex-1 bg-white dark:bg-gray-900">
+      {/* Content */}
+    </SafeAreaView>
+  );
+}
+```
+
+## Known Issues & Solutions
+
+### Theme Toggle Bug
+
+- Issue: Notification bar icons don't update on initial dark mode load
+- Workaround: Toggle theme twice or implement manual status bar updates
+- Solution: Use `expo-status-bar` with `StatusBar.setBarStyle()`
+
+### Offline Storage Limits
+
+- AsyncStorage has size limits (~6MB on Android)
+- Strategy: Implement data cleanup and compression
+- Monitor storage usage and implement LRU cache eviction
+
+### Performance Considerations
+
+- FlatList optimization: Use `removeClippedSubviews`, `maxToRenderPerBatch`
+- Image optimization: Use `expo-image` with proper sizing
+- State updates: Avoid unnecessary re-renders with memoization
+
+## Development Preferences
+
+### Code Style
+
+- **Imports**: Group by React, then external libraries, then internal modules
+- **Naming**: camelCase for variables/functions, PascalCase for components
+- **Types**: Define interfaces in `typings.d.ts`, use descriptive names
+- **Error Handling**: Always provide user-friendly error messages
+
+### File Organization
+
+- **Components**: One component per file, styles co-located
+- **Actions**: One API function per file for testability
+- **Store**: Keep related state in single store file
+- **Assets**: Organize by type (images, fonts, icons)
+
+### Testing Approach
+
+- **Unit Tests**: Test store logic and utility functions
+- **Integration Tests**: Test API calls and component interactions
+- **E2E Tests**: Test complete user flows
+- **Mock Strategy**: Mock API responses and AsyncStorage
+- **Jest Configuration**: Uses react-native preset with TypeScript support
+- **React Native Testing Library**: For component testing with user-centric queries
+- **Test Structure**: Tests organized by component in **tests** directories
+
+### Testing Patterns
+
+```typescript
+// Component testing pattern
+import { render, screen, userEvent } from "@testing-library/react-native";
+
+describe("ComponentName", () => {
+  it("renders correctly", () => {
+    render(<ComponentName />);
+    expect(screen.getByText("Expected Text")).toBeOnTheScreen();
+  });
+
+  it("handles user interactions", async () => {
+    const user = userEvent.setup();
+    render(<ComponentName />);
+
+    await user.press(screen.getByRole("button"));
+    expect(screen.getByText("Updated Text")).toBeOnTheScreen();
+  });
+});
+```
+
+## Evolution Notes
+
+- Started with basic Expo template
+- Added Zustand for state management (replaced basic useState)
+- Implemented Nativewind for consistent styling
+- Added offline support with AsyncStorage persistence
+- Integrated TMDb API with proper error handling
+- Added search functionality with separate store
+- Implemented dark mode with theme switching
+
+## Future Considerations
+
+- Consider React Query for server state management
+- Evaluate React Native Reanimated for animations
+- Plan for user authentication and personalized features
+- Consider implementing push notifications
+- Plan for advanced caching strategies
+
+## Communication Preferences
+
+- Prefer functional components over class components
+- Use TypeScript interfaces for all data structures
+- Implement proper error boundaries
+- Focus on performance optimization from start
+- Maintain clean git history with descriptive commits
+- Document complex business logic with comments
