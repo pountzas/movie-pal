@@ -31,10 +31,13 @@ const MovieItem = ({ movie }: { movie: Movie }) => {
               </Text>
               <View className="flex flex-row justify-between items-center">
                 <Text className="text-sm text-gray-300">
-                  {movie.release_date.slice(0, 4)}
+                  {movie.release_date ? movie.release_date.slice(0, 4) : "N/A"}
                 </Text>
                 <Text className="text-sm text-yellow-500">
-                  {movie.vote_average.toString().slice(0, 3)}/10
+                  {movie.vote_average
+                    ? movie.vote_average.toString().slice(0, 3)
+                    : "N/A"}
+                  /10
                 </Text>
               </View>
             </View>

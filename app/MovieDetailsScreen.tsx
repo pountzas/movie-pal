@@ -50,7 +50,7 @@ const MovieDetailsScreen = () => {
           {movie.title}
         </Text>
         <Text className="mt-2 text-gray-500 dark:text-gray-400">
-          {movie.release_date.slice(0, 4)}
+          {movie.release_date ? movie.release_date.slice(0, 4) : "N/A"}
         </Text>
         <Text
           numberOfLines={isExpanded ? undefined : 4}

@@ -1,6 +1,7 @@
 import { TextInput } from "react-native";
 import { useRef } from "react";
 import { useMovieSearchStore } from "../store/store";
+
 const Search = () => {
   const { fetchSearchedMovies } = useMovieSearchStore();
   const inputRef = useRef<TextInput>(null);
