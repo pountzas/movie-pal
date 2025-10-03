@@ -1,0 +1,81 @@
+# Cursor AI Rules for Job-Hunter Project
+
+## TypeScript Type Safety Rules
+
+### Never Use 'any' Type
+
+**Rule**: Never use the `any` type in TypeScript files (`.ts` and `.tsx`).
+
+**Rationale**: The `any` type defeats TypeScript's type safety and should be avoided in favor of proper typing.
+
+**Alternatives**:
+
+- Use specific types like `string`, `number`, `boolean`
+- Use union types like `string | undefined`
+- Use generic types like `Array<T>`, `Promise<T>`
+- Use `unknown` for truly unknown values that need type checking
+- Use interface/type definitions for complex objects
+
+**Exceptions**:
+
+- Third-party library interfaces where proper typing isn't available (use with ESLint disable comment)
+- Temporary code during development (must be fixed before commit)
+
+**Examples**:
+
+```typescript
+// ❌ BAD
+function processData(data: any) { ... }
+
+// ✅ GOOD
+function processData(data: unknown) { ... }
+function processData(data: { id: string; name: string }) { ... }
+function processData(data: Record<string, unknown>) { ... }
+```
+
+## Development Workflow Rules
+
+### TDD Compliance
+
+- Always write tests first before implementation
+- Follow Red → Green → Refactor cycle
+- Maintain 80%+ test coverage goal
+- Write failing tests, then minimal code to pass, then refactor
+
+### Code Quality Standards
+
+- Use strict TypeScript mode
+- Follow ESLint rules without disable comments (except documented exceptions)
+- Write clear, self-documenting code with meaningful variable names
+- Add JSDoc comments for complex functions
+- Keep functions small and focused on single responsibility
+
+### Import Organization
+
+- Group imports: React/third-party first, then local imports
+- Use absolute imports with `@/` prefix for internal modules
+- Sort imports alphabetically within groups
+
+## Project-Specific Patterns
+
+### Scraper Architecture
+
+- All scrapers extend BaseScraper class
+- Use Strategy pattern for different scraping approaches
+- Implement proper error handling and retry logic
+- Respect rate limits and robots.txt policies
+
+### Firebase Integration
+
+- Use Firebase Auth for authentication
+- Use Firestore for job data storage
+- Implement proper error handling for Firebase operations
+- Follow Firebase security rules best practices
+
+### UI Components
+
+- Use Tailwind CSS for styling
+- Follow shadcn/ui component patterns
+- Implement responsive design
+- Write unit tests for component logic
+- Use React Testing Library for component testing
