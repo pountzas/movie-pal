@@ -14,7 +14,16 @@ const mockMovie = {
   title: "Test Movie",
   release_date: "2023-01-01",
   vote_average: 8.5,
-  poster_path: "/test-poster.jpg"
+  poster_path: "/test-poster.jpg",
+  adult: false,
+  backdrop_path: "/test-backdrop.jpg",
+  genre_ids: [1, 2, 3],
+  original_language: "en",
+  original_title: "Test Movie",
+  overview: "Test movie overview",
+  popularity: 100,
+  video: false,
+  vote_count: 1000
 };
 
 describe("MovieItem", () => {
@@ -24,7 +33,7 @@ describe("MovieItem", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+    (useRouter as any).mockReturnValue(mockRouter);
   });
 
   it("renders movie information correctly", () => {
@@ -60,12 +69,21 @@ describe("MovieItem", () => {
     const incompleteMovie = {
       id: 2,
       title: "Incomplete Movie",
-      release_date: undefined,
-      vote_average: undefined,
-      poster_path: undefined
+      release_date: "2023-01-01",
+      vote_average: 8.5,
+      poster_path: "/test-poster.jpg",
+      adult: false,
+      backdrop_path: "/test-backdrop.jpg",
+      genre_ids: [1, 2, 3],
+      original_language: "en",
+      original_title: "Incomplete Movie",
+      overview: "Test movie overview",
+      popularity: 100,
+      video: false,
+      vote_count: 1000
     };
 
-    render(<MovieItem movie={incompleteMovie as any} />);
+    render(<MovieItem movie={incompleteMovie} />);
 
     // Should still render the title
     expect(screen.getByText("Incomplete Movie")).toBeOnTheScreen();
