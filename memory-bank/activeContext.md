@@ -13,6 +13,8 @@ MoviePal is a **functional React Native movie discovery app** with core features
 - ✅ Search functionality with real-time results
 - ✅ Error handling and loading states
 - ✅ Cross-platform compatibility (iOS/Android/Web)
+- ✅ **Fixed Theme Toggle Bug**: Notification bar icons now update correctly on app launch
+- ✅ **Enhanced Movie Details**: Added cast information to movie detail view
 
 ## Current State Assessment
 
@@ -27,31 +29,37 @@ MoviePal is a **functional React Native movie discovery app** with core features
 
 ### Known Issues
 
-- **Theme Toggle Bug**: Notification bar icons don't update correctly on initial dark mode load (works after manual toggle)
-- **Limited Movie Details**: Basic information only, missing cast/crew, ratings, reviews
+- **Limited Movie Details**: Basic information only, missing crew, ratings, reviews (cast now implemented)
 - **Performance**: No advanced optimizations (image caching, background sync)
-- **✅ COMPLETED: Automated Testing**: Comprehensive Jest + React Native Testing Library suite implemented
+- **⏳ ON HOLD: Automated Testing**: Test files prepared, awaiting React 19.1.0 ecosystem support
 - **✅ FIXED: OTA Update Error**: App was crashing on "Failed to download remote update" error
+- **✅ FIXED: Theme Toggle Bug**: Notification bar icons now update correctly on app launch
 
 ## Active Development Focus
 
 ### Immediate Priorities
 
-1. **Fix Theme Toggle Bug**: Ensure notification bar icons update correctly on app launch
-2. **Enhanced Movie Details**: Add cast, crew, ratings, and reviews to detail view
-3. **Performance Optimization**: Implement image caching and background sync
-4. **UI Polish**: Add animations and micro-interactions
+1. **Enhanced Movie Details**: Add crew, ratings, and reviews to detail view (cast now implemented)
+2. **Performance Optimization**: Implement image caching and background sync
+3. **UI Polish**: Add animations and micro-interactions
+4. **Loading Skeletons**: Implement proper loading states
 
 ### Recently Completed ✅
 
-- **Comprehensive Testing Suite**: 30 tests across 4 components with 100% pass rate
-- **TypeScript Integration**: Full type safety in tests with proper Jest configuration
-- **Code Quality**: Eliminated unused variables and improved test maintainability
+- **Theme Toggle Bug Fixed**: Notification bar icons now update correctly on app launch
+- **Cast Implementation**: Added cast information to movie detail view
+- **Test Files Prepared**: Comprehensive test structure for 4 components created
+- **Jest Configuration**: Testing framework setup with TypeScript support
+- **Code Quality**: Clean test code with proper error handling
 - **OTA Update Fix**: Resolved app crashes from update errors
+
+### On Hold ⏳
+
+- **Automated Testing**: Test execution paused due to React 19.1.0 ecosystem compatibility issues
 
 ### Medium-term Goals
 
-1. **✅ COMPLETED: Testing Suite**: 30 comprehensive tests with full coverage implemented
+1. **⏳ ON HOLD: Testing Suite**: Test files prepared, awaiting React 19.1.0 ecosystem support
 2. **Advanced Features**: Watchlists, favorites, advanced filtering
 3. **User Authentication**: Personalized recommendations and sync
 4. **Push Notifications**: Release updates and recommendations
@@ -75,10 +83,10 @@ MoviePal is a **functional React Native movie discovery app** with core features
 
 ### Phase 1: Bug Fixes & Polish (Current)
 
-- [ ] Fix notification bar theme bug
-- [ ] Add missing movie details (cast, crew, reviews)
+- [ ] Add missing movie details (crew, ratings, reviews)
 - [ ] Implement proper loading skeletons
 - [ ] Add swipe gestures for navigation
+- [ ] Implement proper error boundaries
 
 ### Phase 2: Performance & Testing
 
@@ -116,5 +124,6 @@ MoviePal is a **functional React Native movie discovery app** with core features
 - Movies load within 3 seconds
 - Search provides instant results
 - Offline functionality works seamlessly
-- Dark mode switching works correctly
+- ✅ **Dark mode switching works correctly** (theme toggle bug fixed)
 - Error states are handled gracefully
+- ✅ **Cast information displayed** in movie details
