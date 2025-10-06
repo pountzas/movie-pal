@@ -2,9 +2,9 @@ import React from "react";
 import {
   render,
   screen,
-  userEvent,
   waitFor
 } from "@testing-library/react-native";
+import { userEvent } from "@testing-library/user-event";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import axios from "axios";
 import MovieDetailsScreen from "../MovieDetailsScreen";
@@ -102,19 +102,15 @@ describe("MovieDetailsScreen", () => {
   });
 
   it("navigates back when back button is pressed", async () => {
-    const user = userEvent.setup();
-
     render(<MovieDetailsScreen />);
 
     const backButton = screen.getByText("Back");
-    await user.press(backButton);
+    await userEvent.press(backButton);
 
     expect(mockRouter.back).toHaveBeenCalled();
   });
 
   it("toggles overview expansion when read more/show less is pressed", async () => {
-    const user = userEvent.setup();
-
     render(<MovieDetailsScreen />);
 
     // Initially should show "Read More" button (overview is truncated)
@@ -122,14 +118,14 @@ describe("MovieDetailsScreen", () => {
 
     // Click "Read More" to expand
     const readMoreButton = screen.getByText("Read More");
-    await user.press(readMoreButton);
+    await userEvent.press(readMoreButton);
 
     // Should now show "Show Less" button (overview is expanded)
     expect(screen.getByText("Show Less")).toBeOnTheScreen();
 
     // Click "Show Less" to collapse
     const showLessButton = screen.getByText("Show Less");
-    await user.press(showLessButton);
+    await userEvent.press(showLessButton);
 
     // Should show "Read More" again (overview is collapsed)
     expect(screen.getByText("Read More")).toBeOnTheScreen();

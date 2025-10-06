@@ -1,9 +1,8 @@
 import React from "react";
-import { render, screen, userEvent } from "@testing-library/react-native";
+import { render, screen } from "@testing-library/react-native";
+import { userEvent } from "@testing-library/user-event";
 import { useRouter } from "expo-router";
 import MovieItem from "../MovieItem";
-
-// Mock expo-router
 jest.mock("expo-router", () => ({
   useRouter: jest.fn()
 }));
@@ -50,13 +49,11 @@ describe("MovieItem", () => {
   });
 
   it("navigates to movie details when pressed", async () => {
-    const user = userEvent.setup();
-
     render(<MovieItem movie={mockMovie} />);
 
     // Find and press the movie item
     const movieItem = screen.getByText("Test Movie");
-    await user.press(movieItem);
+    await userEvent.press(movieItem);
 
     // Check if router.push was called with correct parameters
     expect(mockRouter.push).toHaveBeenCalledWith({
