@@ -156,10 +156,51 @@ describe("MovieDetailsScreen", () => {
 
     // Wait for cast to be loaded
     await waitFor(() => {
-      expect(screen.getByText("Cast:")).toBeOnTheScreen();
+      expect(screen.getByText("Cast")).toBeOnTheScreen();
       expect(screen.getByText("Actor One")).toBeOnTheScreen();
       expect(screen.getByText("Actor Two")).toBeOnTheScreen();
     });
+  });
+
+  it("toggles crew visibility when Show/Hide button is pressed", async () => {
+    // Mock crew data in the API response
+    mockedAxios.get.mockResolvedValue({
+      data: {
+        cast: mockCast,
+        crew: [
+          {
+            id: 1,
+            name: "Director One",
+            job: "Director",
+            profile_path: "/director1.jpg"
+          }
+        ]
+      }
+    });
+
+    render(<MovieDetailsScreen />);
+
+    // Initially crew should not be visible
+    expect(screen.queryByText("Director One")).not.toBeOnTheScreen();
+
+    // Click "Show" to display crew
+    await waitFor(() => {
+      const showButton = screen.getByText("Show");
+      return userEvent.press(showButton);
+    });
+
+    // Crew should now be visible
+    await waitFor(() => {
+      expect(screen.getByText("Director One")).toBeOnTheScreen();
+      expect(screen.getByText("Director")).toBeOnTheScreen();
+    });
+
+    // Click "Hide" to hide crew
+    const hideButton = screen.getByText("Hide");
+    await userEvent.press(hideButton);
+
+    // Crew should be hidden again
+    expect(screen.queryByText("Director One")).not.toBeOnTheScreen();
   });
 
   it("handles missing movie data gracefully", () => {

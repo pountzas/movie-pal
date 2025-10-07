@@ -47,9 +47,11 @@
 
 ### High Priority
 
-- [ ] **Package Updates**: Update expo-image to recommended version for compatibility
-- [ ] **No Loading Skeletons**: Basic loading states only
-- [ ] **Performance**: No advanced image caching or optimization
+- [x] **Package Updates**: ✅ Updated expo-image to ~3.0.9 for Expo SDK compatibility
+- [x] **Loading Skeletons**: ✅ Implemented skeleton loading animations for better UX
+- [x] **UI Animations**: ✅ Added smooth fade-in animations and micro-interactions
+- [x] **Crew Toggle**: ✅ Implemented show/hide functionality for crew section
+- [x] **Performance**: ✅ Implemented image caching with expo-image for better performance
 - [ ] **React 19.1.0 Testing Compatibility**: Testing infrastructure ready but blocked by ecosystem issues
 
 ### Medium Priority

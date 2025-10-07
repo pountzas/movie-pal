@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useMovieStore, useMovieSearchStore } from "../store/store";
 import ArrowUp from "../assets/icons/ArrowUp";
-import MovieItem from "./MovieItem";
+import MovieItem, { MovieItemSkeleton } from "./MovieItem";
 
 const MoviesList = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -12,10 +12,11 @@ const MoviesList = () => {
   const flatRef = useRef<FlatList>(null);
 
   useEffect(() => {
-    if (movies.length === 0) fetchMovies();
+    if (movies.length === 0 && !loading) {
+      fetchMovies();
+    }
     console.log("MoviesList rendered", movies.length);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // Only run once on mount
 
   const handleOnEndReached = () => {
     if (query.length) {
@@ -59,32 +60,52 @@ const MoviesList = () => {
         </View>
       )}
       {!error && (
-        <FlatList
-          ref={flatRef}
-          className="space-x-1"
-          data={query.length ? searchedMovies : movies}
-          fadingEdgeLength={20}
-          key={"movies-list"}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={2}
-          onEndReached={handleOnEndReached}
-          onEndReachedThreshold={0.15}
-          renderItem={({ item }) => <MovieItem movie={item} />}
-          onRefresh={() => {
-            useMovieSearchStore.getState().reset();
-            useMovieStore.getState().reset();
-            fetchMovies();
-          }}
-          refreshing={loading || loadingSearchedMovies}
-          columnWrapperStyle={{
-            justifyContent: "space-between",
-            marginBottom: 70
-          }}
-          columnWrapperClassName="space-x-4"
-          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-        />
+        <>
+          {/* Show loading skeletons when initially loading */}
+          {(movies.length === 0 && loading) || (query.length > 0 && searchedMovies.length === 0 && loadingSearchedMovies) ? (
+            <View className="px-5">
+              <View className="flex flex-row justify-between mb-8">
+                <MovieItemSkeleton />
+                <MovieItemSkeleton />
+              </View>
+              <View className="flex flex-row justify-between mb-8">
+                <MovieItemSkeleton />
+                <MovieItemSkeleton />
+              </View>
+              <View className="flex flex-row justify-between mb-8">
+                <MovieItemSkeleton />
+                <MovieItemSkeleton />
+              </View>
+            </View>
+          ) : (
+            <FlatList
+              ref={flatRef}
+              className="space-x-1"
+              data={query.length ? searchedMovies : movies}
+              fadingEdgeLength={20}
+              key={"movies-list"}
+              keyExtractor={(item) => item.id.toString()}
+              numColumns={2}
+              onEndReached={handleOnEndReached}
+              onEndReachedThreshold={0.15}
+              renderItem={({ item }) => <MovieItem movie={item} />}
+              onRefresh={() => {
+                useMovieSearchStore.getState().reset();
+                useMovieStore.getState().reset();
+                fetchMovies();
+              }}
+              refreshing={loading || loadingSearchedMovies}
+              columnWrapperStyle={{
+                justifyContent: "space-between",
+                marginBottom: 70
+              }}
+              columnWrapperClassName="space-x-4"
+              contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}
+              onScroll={handleScroll}
+              scrollEventThrottle={16}
+            />
+          )}
+        </>
       )}
     </View>
   );

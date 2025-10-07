@@ -1,6 +1,7 @@
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
+import { Image } from "expo-image";
 import axios from "axios";
 
 interface CastMember {
@@ -26,8 +27,12 @@ const MovieDetailsScreen = () => {
   const movie = useLocalSearchParams();
   const router = useRouter();
 
-  const [movieDetails, setMovieDetails] = useState<MovieDetails>({ cast: [], crew: [] });
+  const [movieDetails, setMovieDetails] = useState<MovieDetails>({
+    cast: [],
+    crew: []
+  });
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showCrew, setShowCrew] = useState(false);
 
   useEffect(() => {
     fetchMovieDetails();
@@ -43,16 +48,21 @@ const MovieDetailsScreen = () => {
         throw new Error(`HTTP ${response.status}`);
       }
 
-      if (!response.data?.cast || !response.data?.crew) {
+      if (!response.data) {
         throw new Error("Invalid response structure");
       }
 
       setMovieDetails({
-        cast: response.data.cast,
-        crew: response.data.crew
+        cast: response.data.cast || [],
+        crew: response.data.crew || []
       });
     } catch (error) {
       console.error("Error fetching movie details:", error);
+      // Set empty arrays on error to prevent crashes
+      setMovieDetails({
+        cast: [],
+        crew: []
+      });
     }
   };
 
@@ -60,11 +70,13 @@ const MovieDetailsScreen = () => {
     <ScrollView className="h-full bg-gray-200 dark:bg-gray-900">
       <View className="relative w-full">
         <Image
-          height={350}
-          source={{
-            uri: `https://www.themoviedb.org/t/p/w500${movie.backdrop_path}`
-          }}
-          className="w-full"
+          source={`https://www.themoviedb.org/t/p/w500${movie.backdrop_path}`}
+          style={{ width: "100%", height: 350 }}
+          contentFit="cover"
+          placeholder="https://via.placeholder.com/500x350?text=Loading..."
+          placeholderContentFit="cover"
+          cachePolicy="memory-disk"
+          allowDownscaling={true}
         />
         <TouchableOpacity
           onPress={() => router.back()}
@@ -75,7 +87,7 @@ const MovieDetailsScreen = () => {
       </View>
 
       <View className="px-8 py-4">
-        <Text className="text-3xl font-semibold dark:text-gray-50 mb-2">
+        <Text className="text-3xl font-semibold dark:text-gray-50 mb-2 animate-fade-in">
           {movie.title}
         </Text>
 
@@ -86,7 +98,9 @@ const MovieDetailsScreen = () => {
           <View className="flex flex-row items-center">
             <Text className="text-yellow-500 mr-1">★</Text>
             <Text className="text-gray-700 dark:text-gray-300">
-              {movie.vote_average ? movie.vote_average.toFixed(1) : "N/A"}
+              {movie.vote_average && typeof movie.vote_average === 'number' && movie.vote_average > 0
+                ? (movie.vote_average as number).toFixed(1)
+                : "N/A"}
             </Text>
             <Text className="text-gray-500 dark:text-gray-400 ml-1">
               ({movie.vote_count || 0} votes)
@@ -100,8 +114,11 @@ const MovieDetailsScreen = () => {
         >
           {movie.overview}
         </Text>
-        <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)}>
-          <Text className="text-blue-500 mb-4">
+        <TouchableOpacity
+          onPress={() => setIsExpanded(!isExpanded)}
+          className="mb-4 active:scale-95"
+        >
+          <Text className="text-blue-500">
             {isExpanded ? "Show Less" : "Read More"}
           </Text>
         </TouchableOpacity>
@@ -112,57 +129,92 @@ const MovieDetailsScreen = () => {
             <Text className="text-2xl font-semibold dark:text-gray-50 mb-3">
               Cast
             </Text>
-            <ScrollView className="space-x-2" horizontal showsHorizontalScrollIndicator={false}>
-              {movieDetails.cast.slice(0, 10).map((actor: CastMember) => (
-                <View key={actor.id} className="mr-4 w-32">
-                  <Image
-                    source={{
-                      uri: actor.profile_path
-                        ? `https://www.themoviedb.org/t/p/w185${actor.profile_path}`
-                        : "https://via.placeholder.com/185x185?text=No+Image"
-                    }}
-                    className="w-32 h-32 rounded-lg mb-2"
-                  />
-                  <Text className="text-sm font-medium text-gray-900 dark:text-gray-100 text-center">
-                    {actor.name}
-                  </Text>
-                  <Text className="text-xs text-gray-500 dark:text-gray-400 text-center">
-                    {actor.character}
-                  </Text>
-                </View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className="pl-4"
+            >
+              {movieDetails.cast.slice(0, 10).map((actor: CastMember, index: number) => (
+                actor && actor.id ? (
+                <TouchableOpacity
+                  key={`cast-${actor.id}-${index}`}
+                  className="mr-9 w-32 items-center active:scale-95"
+                  onPress={() => {
+                    // Optional: Add press animation or navigation
+                  }}
+                >
+                    <Image
+                      source={
+                        actor.profile_path
+                          ? `https://www.themoviedb.org/t/p/w185${actor.profile_path}`
+                          : "https://via.placeholder.com/185x185?text=No+Image"
+                      }
+                      style={{ width: 128, height: 128, borderRadius: 100 }}
+                      contentFit="cover"
+                      placeholder="https://via.placeholder.com/128x128?text=Loading..."
+                      placeholderContentFit="cover"
+                      cachePolicy="memory-disk"
+                      recyclingKey={`cast-${actor.id}`}
+                    />
+                    <Text className="text-sm font-medium text-gray-900 dark:text-gray-100 text-center leading-tight">
+                      {actor.name || "Unknown"}
+                    </Text>
+                    <Text className="text-xs text-gray-500 dark:text-gray-400 text-center mt-1">
+                      {actor.character || "Unknown"}
+                    </Text>
+                  </TouchableOpacity>
+                ) : null
               ))}
             </ScrollView>
           </View>
         )}
 
         {/* Crew Section */}
-        {movieDetails.crew.length > 0 && (
+        {movieDetails.crew && movieDetails.crew.length > 0 && (
           <View className="mb-6">
-            <Text className="text-2xl font-semibold dark:text-gray-50 mb-3">
-              Crew
-            </Text>
-            <View className="space-y-2">
-              {movieDetails.crew.slice(0, 8).map((crewMember: CrewMember) => (
-                <View key={crewMember.id} className="flex flex-row justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                  <View className="flex-1">
-                    <Text className="text-gray-900 dark:text-gray-100 font-medium">
-                      {crewMember.name}
-                    </Text>
-                    <Text className="text-sm text-gray-500 dark:text-gray-400">
-                      {crewMember.job}
-                    </Text>
-                  </View>
-                  {crewMember.profile_path && (
-                    <Image
-                      source={{
-                        uri: `https://www.themoviedb.org/t/p/w45${crewMember.profile_path}`
-                      }}
-                      className="w-12 h-12 rounded-full"
-                    />
-                  )}
-                </View>
-              ))}
+            <View className="flex flex-row justify-between items-center mb-3">
+              <Text className="text-2xl font-semibold dark:text-gray-50">
+                Crew
+              </Text>
+              <TouchableOpacity
+                onPress={() => setShowCrew(!showCrew)}
+                className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full active:scale-95"
+              >
+                <Text className="text-sm text-gray-700 dark:text-gray-300">
+                  {showCrew ? "Hide" : "Show"}
+                </Text>
+              </TouchableOpacity>
             </View>
+            {showCrew && (
+              <View className="space-y-2">
+                {movieDetails.crew.slice(0, 8).map((crewMember: CrewMember, index: number) => (
+                  crewMember && crewMember.id ? (
+                    <View key={`crew-${crewMember.id}-${index}`} className="flex flex-row justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <View className="flex-1">
+                        <Text className="text-gray-900 dark:text-gray-100 font-medium">
+                          {crewMember.name || "Unknown"}
+                        </Text>
+                        <Text className="text-sm text-gray-500 dark:text-gray-400">
+                          {crewMember.job || "Unknown"}
+                        </Text>
+                      </View>
+                      {crewMember.profile_path && (
+                        <Image
+                          source={`https://www.themoviedb.org/t/p/w45${crewMember.profile_path}`}
+                          style={{ width: 48, height: 48 }}
+                          className="rounded-full"
+                          contentFit="cover"
+                          placeholder="https://via.placeholder.com/48x48?text=..."
+                          placeholderContentFit="cover"
+                          cachePolicy="memory-disk"
+                          recyclingKey={`crew-${crewMember.id}`}
+                        />
+                      )}
+                    </View>
+                  ) : null
+                ))}
+              </View>
+            )}
           </View>
         )}
       </View>

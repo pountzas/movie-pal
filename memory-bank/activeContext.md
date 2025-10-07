@@ -38,8 +38,11 @@ MoviePal is a **functional React Native movie discovery app** with core features
 
 ### Known Issues
 
-- **Performance**: No advanced optimizations (image caching, background sync)
-- **Package Updates**: expo-image needs updating for best compatibility
+- **Performance**: ✅ Implemented image caching with expo-image for better performance
+- **Loading Skeletons**: ✅ Implemented skeleton loading animations for better UX
+- **UI Animations**: ✅ Added smooth fade-in animations and micro-interactions
+- **Crew Toggle**: ✅ Implemented show/hide functionality for crew section
+- **Package Updates**: ✅ expo-image updated to ~3.0.9 for Expo SDK compatibility
 - **⏳ ON HOLD: Automated Testing**: Complete testing infrastructure implemented but blocked by React 19.1.0 ecosystem compatibility
 - **⚠️ React 19.1.0 Compatibility**: Testing libraries not fully compatible with React 19.1.0
 - **✅ FIXED: Web AsyncStorage Issue**: Platform-aware storage adapter implemented

@@ -115,9 +115,10 @@ App (index.tsx)
 
 ### Image Optimization
 
-- **Expo Image**: Automatic optimization and caching
+- **Expo Image**: Advanced caching with memory-disk policy
+- **Performance Features**: Placeholder images, content fit, downscaling
 - **Responsive Images**: Different sizes for different contexts
-- **Lazy Loading**: Images load as they come into viewport
+- **Lazy Loading**: Images load as they come into viewport with recycling keys
 
 ### Bundle Optimization
 
