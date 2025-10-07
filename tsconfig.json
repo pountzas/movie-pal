@@ -3,7 +3,10 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
   "include": [
     "**/*.ts",

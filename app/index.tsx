@@ -1,4 +1,4 @@
-import { colorScheme, useColorScheme } from "nativewind";
+import { useColorScheme } from "nativewind";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
 import "../global.css";
@@ -7,10 +7,8 @@ import { useState } from "react";
 import Search from "@/components/Search";
 import MoviesList from "@/components/MoviesList";
 
-colorScheme.set("system");
-
 export default function App() {
-  const { colorScheme, toggleColorScheme } = useColorScheme();
+  const { toggleColorScheme } = useColorScheme();
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
     toggleColorScheme();

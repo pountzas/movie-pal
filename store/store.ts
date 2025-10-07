@@ -3,6 +3,66 @@ import { persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getMoviesByTitle } from "../actions/getMoviesByTitle";
 import { getMoviesByPopularity } from "../actions/getMoviesByPopularity";
+import { Platform } from "react-native";
+
+// Platform-aware storage adapter
+const createStorage = () => {
+  if (Platform.OS === 'web') {
+    // Use localStorage for web
+    return {
+      getItem: async (name: string) => {
+        try {
+          const item = localStorage.getItem(name);
+          return item ? JSON.parse(item) : null;
+        } catch (error) {
+          console.error("Failed to get item from localStorage:", error);
+          return null;
+        }
+      },
+      setItem: async (name: string, value: string) => {
+        try {
+          localStorage.setItem(name, JSON.stringify(value));
+        } catch (error) {
+          console.error("Failed to set item in localStorage:", error);
+        }
+      },
+      removeItem: async (name: string) => {
+        try {
+          localStorage.removeItem(name);
+        } catch (error) {
+          console.error("Failed to remove item from localStorage:", error);
+        }
+      }
+    };
+  } else {
+    // Use AsyncStorage for native platforms
+    return {
+      getItem: async (name: string) => {
+        try {
+          const item = await AsyncStorage.getItem(name);
+          return item ? JSON.parse(item) : null;
+        } catch (error) {
+          console.error("Failed to get item from AsyncStorage:", error);
+          return null;
+        }
+      },
+      setItem: async (name: string, value: string) => {
+        try {
+          await AsyncStorage.setItem(name, JSON.stringify(value));
+        } catch (error) {
+          console.error("Failed to set item in AsyncStorage:", error);
+        }
+      },
+      removeItem: async (name: string) => {
+        try {
+          await AsyncStorage.removeItem(name);
+        } catch (error) {
+          console.error("Failed to remove item from AsyncStorage:", error);
+        }
+      }
+    };
+  }
+};
 
 export const useMovieStore = create<MovieStore>()(
   persist(
@@ -48,31 +108,7 @@ export const useMovieStore = create<MovieStore>()(
     }),
     {
       name: "movie-store",
-      storage: {
-        getItem: async (name) => {
-          try {
-            const item = await AsyncStorage.getItem(name);
-            return item ? JSON.parse(item) : null;
-          } catch (error) {
-            console.error("Failed to get item from AsyncStorage:", error);
-            return null;
-          }
-        },
-        setItem: async (name, value) => {
-          try {
-            await AsyncStorage.setItem(name, JSON.stringify(value));
-          } catch (error) {
-            console.error("Failed to set item in AsyncStorage:", error);
-          }
-        },
-        removeItem: async (name) => {
-          try {
-            await AsyncStorage.removeItem(name);
-          } catch (error) {
-            console.error("Failed to remove item from AsyncStorage:", error);
-          }
-        }
-      }
+      storage: createStorage()
     }
   )
 );

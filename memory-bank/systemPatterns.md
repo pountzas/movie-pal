@@ -69,8 +69,9 @@ const useMovies = () => {
 
 ### Offline-First Pattern
 
-- **Cache Strategy**: Store API responses in AsyncStorage
-- **Hydration**: Restore cached data on app launch
+- **Platform-Aware Storage**: Use AsyncStorage on native platforms, localStorage on web
+- **Cache Strategy**: Store API responses in appropriate storage mechanism
+- **Hydration**: Restore cached data on app launch across platforms
 - **Sync Logic**: Background sync for fresh data when online
 
 ## Component Relationships
