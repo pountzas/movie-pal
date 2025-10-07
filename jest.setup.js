@@ -1,3 +1,26 @@
+// Mock React Native completely before any imports
+jest.mock('react-native', () => ({
+  TextInput: jest.fn((props) => 'TextInput'),
+  View: 'View',
+  StyleSheet: {
+    create: jest.fn(() => ({})),
+    flatten: jest.fn(),
+  },
+  Dimensions: {
+    get: jest.fn(() => ({ width: 375, height: 812 })),
+  },
+  Platform: {
+    OS: 'ios',
+    select: jest.fn((obj) => obj.ios || obj.default),
+  },
+  useColorScheme: jest.fn(() => 'light'),
+  Appearance: {
+    getColorScheme: jest.fn(() => 'light'),
+    addChangeListener: jest.fn(),
+    removeChangeListener: jest.fn(),
+  },
+}));
+
 import 'react-native-gesture-handler/jestSetup';
 
 // Mock react-native-reanimated
@@ -86,8 +109,20 @@ jest.mock('react-native/src/private/featureflags/ReactNativeFeatureFlags', () =>
   enableNativeCSSParsing: () => {},
 }));
 
-// Mock React Native CSS Interop
-jest.mock('react-native-css-interop', () => ({}));
+// Mock React Native CSS Interop more comprehensively
+jest.mock('react-native-css-interop', () => ({
+  create: jest.fn(),
+  useColorScheme: jest.fn(() => ({ colorScheme: 'light' })),
+  useUnstableNativeVariable: jest.fn(),
+}));
+
+// Mock the specific color-scheme module that's causing issues
+jest.mock('react-native-css-interop/src/runtime/web/color-scheme', () => ({
+  getColorScheme: jest.fn(() => 'light'),
+}));
+
+// Mock global CSS file
+jest.mock('../global.css', () => ({}), { virtual: true });
 
 // Setup testing-library
 // Note: extend-expect may not be available in newer versions

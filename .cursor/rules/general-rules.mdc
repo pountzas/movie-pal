@@ -32,7 +32,8 @@ Performance Optimization:
 
 UI and Styling:
 
-- Consistent Styling: Use StyleSheet.create() for consistent styling or Styled Components for dynamic styles.
+- **Use NativeWind for Styling**: This project uses NativeWind (Tailwind CSS for React Native) for all styling. Use `className` prop with Tailwind utility classes instead of inline `style` props or StyleSheet.create().
+- Consistent Styling: Use NativeWind's utility classes for consistent styling across the application.
 - Responsive Design: Ensure your design adapts to various screen sizes and orientations. Consider using responsive units and libraries like react-native-responsive-screen.
 - Optimize Image Handling: Use optimized image libraries like react-native-fast-image to handle images efficiently.
 
