@@ -2,6 +2,13 @@ import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image } from "expo-image";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  runOnJS,
+} from "react-native-reanimated";
 import axios from "axios";
 
 interface CastMember {
@@ -27,12 +34,58 @@ const MovieDetailsScreen = () => {
   const movie = useLocalSearchParams();
   const router = useRouter();
 
+  // Animation values for swipe gestures
+  const translateX = useSharedValue(0);
+  const opacity = useSharedValue(1);
+
   const [movieDetails, setMovieDetails] = useState<MovieDetails>({
     cast: [],
     crew: []
   });
   const [isExpanded, setIsExpanded] = useState(false);
   const [showCrew, setShowCrew] = useState(false);
+
+  // Simplified swipe gesture - only trigger navigation, don't interfere with scrolling
+  const panGesture = Gesture.Pan()
+    .onStart((event) => {
+      // Only allow navigation gestures that start from the very left edge
+      // This prevents interfering with cast scrolling
+      if (event.x < 30) { // Within 30px of left edge
+        return true;
+      }
+      return false;
+    })
+    .onUpdate((event) => {
+      // Only respond to horizontal swipes from left edge
+      if (Math.abs(event.translationX) > Math.abs(event.translationY) && event.x < 50) {
+        translateX.value = event.translationX;
+        opacity.value = Math.max(0.3, 1 - Math.abs(event.translationX) / 200);
+      }
+    })
+    .onEnd((event) => {
+      if (Math.abs(event.translationX) > 150 && Math.abs(event.velocityY) < 1000 && event.x < 50) {
+        // Swipe right from left edge - go back
+        if (event.translationX > 0) {
+          translateX.value = withSpring(400);
+          opacity.value = withSpring(0, {}, () => {
+            runOnJS(router.back)();
+          });
+        } else {
+          // Snap back to original position
+          translateX.value = withSpring(0);
+          opacity.value = withSpring(1);
+        }
+      } else {
+        // Snap back to original position
+        translateX.value = withSpring(0);
+        opacity.value = withSpring(1);
+      }
+    });
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+    opacity: opacity.value,
+  }));
 
   useEffect(() => {
     fetchMovieDetails();
@@ -67,7 +120,11 @@ const MovieDetailsScreen = () => {
   };
 
   return (
-    <ScrollView className="h-full bg-gray-200 dark:bg-gray-900">
+    <GestureDetector gesture={panGesture}>
+      <Animated.ScrollView
+        className="h-full bg-gray-200 dark:bg-gray-900"
+        style={animatedStyle}
+      >
       <View className="relative w-full">
         <Image
           source={`https://www.themoviedb.org/t/p/w500${movie.backdrop_path}`}
@@ -129,12 +186,13 @@ const MovieDetailsScreen = () => {
             <Text className="text-2xl font-semibold dark:text-gray-50 mb-3">
               Cast
             </Text>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              className="pl-4"
-            >
-              {movieDetails.cast.slice(0, 10).map((actor: CastMember, index: number) => (
+            <GestureDetector gesture={Gesture.Native()}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                className="pl-4"
+              >
+              {movieDetails.cast.slice(0, 30).map((actor: CastMember, index: number) => (
                 actor && actor.id ? (
                 <TouchableOpacity
                   key={`cast-${actor.id}-${index}`}
@@ -165,7 +223,8 @@ const MovieDetailsScreen = () => {
                   </TouchableOpacity>
                 ) : null
               ))}
-            </ScrollView>
+              </ScrollView>
+            </GestureDetector>
           </View>
         )}
 
@@ -218,7 +277,8 @@ const MovieDetailsScreen = () => {
           </View>
         )}
       </View>
-    </ScrollView>
+      </Animated.ScrollView>
+    </GestureDetector>
   );
 };
 

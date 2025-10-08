@@ -22,6 +22,7 @@ interface Movie {
 
 const MovieItem = ({ movie }: { movie: Movie }) => {
   const router = useRouter();
+
   const handlePress = () => {
     router.push({
       pathname: "/MovieDetailsScreen",
@@ -33,7 +34,8 @@ const MovieItem = ({ movie }: { movie: Movie }) => {
     <View className="flex flex-col items-center">
       <TouchableOpacity
         onPress={handlePress}
-        className="h-[265px] w-[150px] rounded"
+        className="h-[265px] w-[150px] rounded active:scale-95 transition-transform"
+        activeOpacity={0.8}
       >
         <Image
           source={`https://www.themoviedb.org/t/p/w220_and_h330_face${movie.poster_path}`}

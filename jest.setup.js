@@ -71,7 +71,7 @@ jest.mock('expo-image', () => ({
 
 // Mock NativeWind/Tailwind CSS
 jest.mock('nativewind', () => ({
-  styled: () => (component: any) => component,
+  styled: () => (component) => component,
 }));
 
 // Setup React Native testing environment
@@ -125,4 +125,5 @@ jest.mock('react-native-css-interop/src/runtime/web/color-scheme', () => ({
 jest.mock('../global.css', () => ({}), { virtual: true });
 
 // Setup testing-library
-// Note: extend-expect may not be available in newer versions
+import '@testing-library/react-native/extend-expect';
+import '@testing-library/jest-native/legacy-extend-expect';

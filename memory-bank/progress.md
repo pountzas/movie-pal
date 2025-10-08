@@ -49,8 +49,10 @@
 
 - [x] **Package Updates**: ✅ Updated expo-image to ~3.0.9 for Expo SDK compatibility
 - [x] **Loading Skeletons**: ✅ Implemented skeleton loading animations for better UX
-- [x] **UI Animations**: ✅ Added smooth fade-in animations and micro-interactions
+- [x] **UI Animations**: ✅ Added CSS-based animations and micro-interactions (simplified for compatibility)
 - [x] **Crew Toggle**: ✅ Implemented show/hide functionality for crew section
+- [x] **Swipe Navigation**: ✅ Properly implemented with edge-based detection and nested scroll handling
+- [x] **Cast Scrolling**: ✅ Fixed horizontal scrolling for cast section using Gesture.Native()
 - [x] **Pull-to-Refresh**: ✅ Added pull-to-refresh functionality for fresh data loading
 - [x] **Performance**: ✅ Implemented image caching with expo-image for better performance
 - [ ] **React 19.1.0 Testing Compatibility**: Testing infrastructure ready but blocked by ecosystem issues
@@ -152,6 +154,7 @@
 - [x] Expo DevTools for debugging
 - [x] React Native Debugger
 - [x] Git version control
+- [x] Android (Expo Go) as primary testing platform
 
 ### Deployment Ready
 

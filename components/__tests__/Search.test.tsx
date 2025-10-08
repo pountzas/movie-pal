@@ -1,5 +1,5 @@
 import React from "react";
-import TestRenderer from "react-test-renderer";
+import { render } from "@testing-library/react-native";
 import Search from "../Search";
 
 // Mock the store completely before importing anything
@@ -29,7 +29,7 @@ describe("Search Component", () => {
 
     // Component should render without throwing
     expect(() => {
-      TestRenderer.create(<Search />);
+      render(<Search />);
     }).not.toThrow();
   });
 
@@ -41,7 +41,7 @@ describe("Search Component", () => {
     });
 
     // Render component (this should work without throwing)
-    TestRenderer.create(<Search />);
+    render(<Search />);
 
     // Verify the store mock is properly configured
     expect(mockStore.useMovieSearchStore).toBeDefined();
@@ -56,11 +56,9 @@ describe("Search Component", () => {
     });
 
     // Render component
-    const component = TestRenderer.create(<Search />);
-    const tree = component.toJSON();
+    const result = render(<Search />);
 
     // Should render successfully (even if mocked)
-    expect(component).toBeTruthy();
-    expect(tree).toBeDefined();
+    expect(result).toBeTruthy();
   });
 });
