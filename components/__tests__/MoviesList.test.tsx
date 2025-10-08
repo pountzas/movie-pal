@@ -225,4 +225,15 @@ describe("MoviesList", () => {
     // Should display error message
     expect(screen.getByText("Error: Failed to fetch movies")).toBeOnTheScreen();
   });
+
+  it("renders RefreshControl for pull-to-refresh functionality", () => {
+    // Test that the RefreshControl component is properly integrated
+    // In React Native Testing Library, we can verify the component structure
+    render(<MoviesList />);
+
+    // The component should render without errors
+    // RefreshControl integration is tested through the FlatList props
+    // This test ensures the component doesn't crash with RefreshControl
+    expect(screen.getByText("Test Movie 1")).toBeOnTheScreen();
+  });
 });

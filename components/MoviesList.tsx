@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View, RefreshControl } from "react-native";
 import { useMovieStore, useMovieSearchStore } from "../store/store";
 import ArrowUp from "../assets/icons/ArrowUp";
 import MovieItem, { MovieItemSkeleton } from "./MovieItem";
@@ -16,13 +16,36 @@ const MoviesList = () => {
       fetchMovies();
     }
     console.log("MoviesList rendered", movies.length);
-  }, []); // Only run once on mount
+  }, []);
 
   const handleOnEndReached = () => {
     if (query.length) {
       useMovieSearchStore.getState().fetchSearchedMovies(query);
     } else {
       fetchMovies();
+    }
+  };
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    if (isRefreshing) return; // Prevent multiple simultaneous refreshes
+
+    setIsRefreshing(true);
+    try {
+      // Reset both stores first
+      useMovieSearchStore.getState().reset();
+      useMovieStore.getState().reset();
+
+      // Small delay to ensure stores are reset
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Fetch fresh data
+      await fetchMovies();
+    } catch (error) {
+      console.error("Error during refresh:", error);
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
@@ -89,12 +112,16 @@ const MoviesList = () => {
               onEndReached={handleOnEndReached}
               onEndReachedThreshold={0.15}
               renderItem={({ item }) => <MovieItem movie={item} />}
-              onRefresh={() => {
-                useMovieSearchStore.getState().reset();
-                useMovieStore.getState().reset();
-                fetchMovies();
-              }}
-              refreshing={loading || loadingSearchedMovies}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isRefreshing}
+                  onRefresh={handleRefresh}
+                  colors={["#007AFF"]} // Blue color for iOS
+                  tintColor="#007AFF" // Blue color for Android
+                  title="Pull to refresh" // Optional title for iOS
+                  titleColor="#007AFF"
+                />
+              }
               columnWrapperStyle={{
                 justifyContent: "space-between",
                 marginBottom: 70

@@ -51,6 +51,7 @@
 - [x] **Loading Skeletons**: ✅ Implemented skeleton loading animations for better UX
 - [x] **UI Animations**: ✅ Added smooth fade-in animations and micro-interactions
 - [x] **Crew Toggle**: ✅ Implemented show/hide functionality for crew section
+- [x] **Pull-to-Refresh**: ✅ Added pull-to-refresh functionality for fresh data loading
 - [x] **Performance**: ✅ Implemented image caching with expo-image for better performance
 - [ ] **React 19.1.0 Testing Compatibility**: Testing infrastructure ready but blocked by ecosystem issues
 
