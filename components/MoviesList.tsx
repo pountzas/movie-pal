@@ -6,6 +6,7 @@ import MovieItem, { MovieItemSkeleton } from "./MovieItem";
 
 const MoviesList = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const { movies, fetchMovies, loading, error } = useMovieStore();
   const { searchedMovies, loadingSearchedMovies, query, searchError } =
     useMovieSearchStore();
@@ -18,11 +19,36 @@ const MoviesList = () => {
     console.log("MoviesList rendered", movies.length);
   }, []);
 
-  const handleOnEndReached = () => {
-    if (query.length) {
-      useMovieSearchStore.getState().fetchSearchedMovies(query);
-    } else {
-      fetchMovies();
+  const handleOnEndReached = async () => {
+    // Prevent multiple rapid calls
+    if (isLoadingMore) return;
+
+    setIsLoadingMore(true);
+
+    try {
+      // Get fresh state to avoid stale loading values
+      const { hasMore: searchHasMore, loadingSearchedMovies } = useMovieSearchStore.getState();
+      const { hasMore: moviesHasMore, loading } = useMovieStore.getState();
+
+      console.log("End reached - Query:", query.length, "Search hasMore:", searchHasMore, "Movies hasMore:", moviesHasMore, "loading:", loading);
+
+      if (query.length) {
+        // Check if search has more items and is not already loading
+        if (searchHasMore && !loadingSearchedMovies) {
+          console.log("Fetching more search results for:", query);
+          await useMovieSearchStore.getState().fetchSearchedMovies(query);
+        }
+      } else {
+        // Check if movies have more items and are not already loading
+        if (moviesHasMore && !loading) {
+          console.log("Fetching more movies");
+          await fetchMovies();
+        }
+      }
+    } catch (error) {
+      console.error("Error in handleOnEndReached:", error);
+    } finally {
+      setIsLoadingMore(false);
     }
   };
 
@@ -110,7 +136,7 @@ const MoviesList = () => {
               keyExtractor={(item) => item.id.toString()}
               numColumns={2}
               onEndReached={handleOnEndReached}
-              onEndReachedThreshold={0.15}
+              onEndReachedThreshold={0.5} // Reset to default for better reliability
               renderItem={({ item }) => <MovieItem movie={item} />}
               refreshControl={
                 <RefreshControl
@@ -130,6 +156,13 @@ const MoviesList = () => {
               contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}
               onScroll={handleScroll}
               scrollEventThrottle={16}
+              showsVerticalScrollIndicator={true}
+              bounces={true}
+              removeClippedSubviews={true}
+              maxToRenderPerBatch={5}
+              updateCellsBatchingPeriod={100}
+              initialNumToRender={8}
+              // Remove getItemLayout as it might cause issues with dynamic content
             />
           )}
         </>

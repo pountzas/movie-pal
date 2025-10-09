@@ -130,11 +130,13 @@ export const useMovieStore = create<MovieStore>()(
           const data = await getMoviesByPopularity(page);
 
           if (data && data.results) {
+            const newPage = page + 1;
             set({
               movies: [...movies, ...data.results],
-              page: page + 1,
-              hasMore: page < (data.total_pages || 1000),
-              error: null
+              page: newPage,
+              hasMore: newPage <= (data.total_pages || 1000),
+              error: null,
+              loading: false  // Explicitly set loading to false
             });
           } else {
             set({ error: "Invalid response from API", loading: false });
@@ -190,11 +192,13 @@ export const useMovieSearchStore = create<MovieSearchStore>((set, get) => ({
       const data = await getMoviesByTitle(query, page);
 
       if (data && data.results) {
+        const newPage = page + 1;
         set({
           searchedMovies: [...searchedMovies, ...data.results],
-          page: page + 1,
-          hasMore: page < (data.total_pages || 1000),
-          searchError: null
+          page: newPage,
+          hasMore: newPage <= (data.total_pages || 1000),
+          searchError: null,
+          loadingSearchedMovies: false  // Explicitly set loading to false
         });
       } else {
         set({ searchError: "Invalid response from API", loadingSearchedMovies: false });

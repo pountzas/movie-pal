@@ -53,6 +53,8 @@
 - [x] **Crew Toggle**: ✅ Implemented show/hide functionality for crew section
 - [x] **Swipe Navigation**: ✅ Properly implemented with edge-based detection and nested scroll handling
 - [x] **Cast Scrolling**: ✅ Fixed horizontal scrolling for cast section using Gesture.Native()
+- [x] **Infinite Scroll**: ✅ Fixed loading state management and FlatList configuration for reliable infinite scrolling
+- [x] **Gesture Performance**: ✅ Swipe-back navigation updated to use `scheduleOnRN` instead of deprecated `runOnJS`
 - [x] **Pull-to-Refresh**: ✅ Added pull-to-refresh functionality for fresh data loading
 - [x] **Performance**: ✅ Implemented image caching with expo-image for better performance
 - [ ] **React 19.1.0 Testing Compatibility**: Testing infrastructure ready but blocked by ecosystem issues

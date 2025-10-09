@@ -15,6 +15,7 @@ MoviePal is a **functional React Native movie discovery app** with core features
 - ✅ Cross-platform compatibility (iOS/Android/Web)
 - ✅ **Fixed Theme Toggle Bug**: Notification bar icons now update correctly on app launch
 - ✅ **Enhanced Movie Details**: Added cast and crew information to movie detail view
+- ✅ **Gesture Navigation Update**: Replaced deprecated `runOnJS` usage with `scheduleOnRN` for swipe-back navigation stability
 - ✅ **Testing Infrastructure**: Complete Jest + React Testing Library setup implemented
 - ✅ **Enhanced Jest Setup**: Improved testing capabilities with proper configuration
 - ✅ **Project Documentation**: Comprehensive memory bank documentation updated
@@ -44,6 +45,8 @@ MoviePal is a **functional React Native movie discovery app** with core features
 - **Crew Toggle**: ✅ Implemented show/hide functionality for crew section
 - **Swipe Navigation**: ✅ Properly implemented with edge-based detection and nested scroll handling
 - **Cast Scrolling**: ✅ Fixed horizontal scrolling for cast section using Gesture.Native()
+- **Infinite Scroll**: ✅ Fixed loading state management and FlatList configuration for reliable infinite scrolling
+- **Gesture Performance**: ✅ Swipe-back uses `scheduleOnRN` to avoid deprecated `runOnJS` calls while keeping smooth animations
 - **Pull-to-Refresh**: ✅ Added pull-to-refresh functionality for fresh data loading
 - **Package Updates**: ✅ expo-image updated to ~3.0.9 for Expo SDK compatibility
 - **⏳ ON HOLD: Automated Testing**: Complete testing infrastructure implemented but blocked by React 19.1.0 ecosystem compatibility
