@@ -112,8 +112,8 @@ const MovieDetailsScreen = () => {
       const response = await axios.get(
         `https://api.themoviedb.org/3/movie/${movie.id}/credits`,
         {
-          headers: {
-            Authorization: `Bearer ${process.env.EXPO_PUBLIC_TMDB_API_KEY}`,
+          params: {
+            api_key: process.env.EXPO_PUBLIC_TMDB_API_KEY,
           },
           timeout: 30000
         }
