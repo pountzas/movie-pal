@@ -110,7 +110,12 @@ const MovieDetailsScreen = () => {
   const fetchMovieDetails = async () => {
     try {
       const response = await axios.get(
-        `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${process.env.EXPO_PUBLIC_TMDB_API_KEY}`
+        `https://api.themoviedb.org/3/movie/${movie.id}/credits`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.EXPO_PUBLIC_TMDB_API_KEY}`,
+          },
+        }
       );
 
       if (response.status !== 200) {

@@ -5,8 +5,10 @@ const BASE_URL = "https://api.themoviedb.org/3/discover/movie";
 
 export const getMoviesByPopularity = async (page = 1) => {
   const response = await axios.get(BASE_URL, {
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+    },
     params: {
-      api_key: API_KEY,
       language: "en-US",
       page,
       include_adult: false,

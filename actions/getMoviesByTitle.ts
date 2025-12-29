@@ -9,8 +9,10 @@ const BASE_URL = 'https://api.themoviedb.org/3/search/movie';
 
 export const getMoviesByTitle = async (title = 'matrix', page = 1) => {
   const response = await axios.get(BASE_URL, {
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+    },
     params: {
-      api_key: API_KEY,
       language: 'en-US',
       page,
       query: title,
