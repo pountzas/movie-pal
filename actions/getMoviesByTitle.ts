@@ -19,6 +19,7 @@ export const getMoviesByTitle = async (title = 'matrix', page = 1) => {
       include_adult: false,
       append_to_response: 'videos,images',
     },
+    timeout: 30000
   });
   if (response.status !== 200) {
     throw new Error(`Error fetching movies: ${response.statusText}`);

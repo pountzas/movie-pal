@@ -13,8 +13,9 @@ export const getMoviesByPopularity = async (page = 1) => {
       page,
       include_adult: false,
       append_to_response: "videos,images",
-      sort_by: "popularity.desc"
-    }
+      sort_by: "popularity.desc",
+    },
+    timeout: 30000,
   });
   if (response.status !== 200) {
     throw new Error(`Error fetching movies: ${response.statusText}`);

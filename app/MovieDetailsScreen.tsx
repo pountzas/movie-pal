@@ -115,6 +115,7 @@ const MovieDetailsScreen = () => {
           headers: {
             Authorization: `Bearer ${process.env.EXPO_PUBLIC_TMDB_API_KEY}`,
           },
+          timeout: 30000
         }
       );
 
