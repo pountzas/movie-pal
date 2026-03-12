@@ -2,19 +2,9 @@ declare module "react-native-reanimated" {
   import type { ComponentType } from "react";
   import type { ScrollViewProps } from "react-native";
 
-  export enum ReanimatedLogLevel {
-    warn,
-    error,
-  }
-
   export interface SharedValue<T> {
     value: T;
   }
-
-  export function configureReanimatedLogger(config: {
-    level: ReanimatedLogLevel;
-    strict: boolean;
-  }): void;
 
   export function useSharedValue<T>(initialValue: T): SharedValue<T>;
   export function useAnimatedStyle<T extends object>(updater: () => T): T;
@@ -42,22 +32,22 @@ declare module "react-native-gesture-handler" {
 
   export const GestureHandlerRootView: ComponentType<GestureHandlerRootViewProps>;
 
-  export interface PanGestureEvent {
+  export interface PanGestureLikeEvent {
     x: number;
     translationX: number;
     translationY: number;
     velocityY: number;
   }
 
-  export interface PanGestureConfig {
-    onBegin(cb: (event: PanGestureEvent) => void): PanGestureConfig;
-    onUpdate(cb: (event: PanGestureEvent) => void): PanGestureConfig;
-    onEnd(cb: (event: PanGestureEvent) => void): PanGestureConfig;
-    onFinalize(cb: () => void): PanGestureConfig;
+  export interface PanGestureLikeConfig {
+    onBegin(cb: (event: PanGestureLikeEvent) => void): PanGestureLikeConfig;
+    onUpdate(cb: (event: PanGestureLikeEvent) => void): PanGestureLikeConfig;
+    onEnd(cb: (event: PanGestureLikeEvent) => void): PanGestureLikeConfig;
+    onFinalize(cb: () => void): PanGestureLikeConfig;
   }
 
   export const Gesture: {
-    Pan(): PanGestureConfig;
+    Pan(): PanGestureLikeConfig;
     Native(): unknown;
   };
 
@@ -69,12 +59,10 @@ declare module "react-native-gesture-handler" {
 declare module "react-native-svg" {
   import type { ComponentType, PropsWithChildren } from "react";
 
-  type SvgBaseProps = {
-    [key: string]: string | number | boolean | object | undefined;
-  };
+  type SvgProps = Record<string, unknown>;
 
-  const Svg: ComponentType<PropsWithChildren<SvgBaseProps>>;
-  export const Rect: ComponentType<SvgBaseProps>;
-  export const Path: ComponentType<SvgBaseProps>;
+  const Svg: ComponentType<PropsWithChildren<SvgProps>>;
+  export const Rect: ComponentType<SvgProps>;
+  export const Path: ComponentType<SvgProps>;
   export default Svg;
 }

@@ -1,17 +1,17 @@
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import {
-  configureReanimatedLogger,
-  ReanimatedLogLevel,
-} from "react-native-reanimated";
+// import {
+//   configureReanimatedLogger,
+//   ReanimatedLogLevel,
+// } from "react-native-reanimated";
 import "../global.css";
 import { useColorScheme } from "nativewind";
 
-// Configure Reanimated logger to disable strict mode warnings
-configureReanimatedLogger({
-  level: ReanimatedLogLevel.warn,
-  strict: false, // Disable strict mode to suppress warnings
-});
+// // Configure Reanimated logger to disable strict mode warnings
+// configureReanimatedLogger({
+//   level: ReanimatedLogLevel.warn,
+//   strict: false, // Disable strict mode to suppress warnings
+// });
 
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
