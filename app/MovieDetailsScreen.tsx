@@ -30,6 +30,13 @@ interface MovieDetails {
   crew: CrewMember[];
 }
 
+interface EdgePanEvent {
+  x: number;
+  translationX: number;
+  translationY: number;
+  velocityY: number;
+}
+
 const MovieDetailsScreen = () => {
   const movie = useLocalSearchParams();
   const router = useRouter();
@@ -54,12 +61,12 @@ const MovieDetailsScreen = () => {
 
   // Simplified swipe gesture - only trigger navigation, don't interfere with scrolling
   const panGesture = Gesture.Pan()
-    .onBegin((event) => {
+    .onBegin((event: EdgePanEvent) => {
       // Only allow navigation gestures that start from the very left edge
       // This prevents interfering with cast scrolling
       shouldHandleGesture.value = event.x < 50;
     })
-    .onUpdate((event) => {
+    .onUpdate((event: EdgePanEvent) => {
       if (!shouldHandleGesture.value) {
         return;
       }
@@ -73,7 +80,7 @@ const MovieDetailsScreen = () => {
         opacity.value = Math.max(0.3, 1 - Math.abs(event.translationX) / 200);
       }
     })
-    .onEnd((event) => {
+    .onEnd((event: EdgePanEvent) => {
       if (!shouldHandleGesture.value) {
         translateX.value = withSpring(0);
         opacity.value = withSpring(1);
