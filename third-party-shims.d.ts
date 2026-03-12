@@ -2,11 +2,7 @@ declare module "react-native-reanimated" {
   import type { ComponentType } from "react";
   import type { ScrollViewProps } from "react-native";
 
-  export interface SharedValue<T> {
-    value: T;
-  }
-
-  export function useSharedValue<T>(initialValue: T): SharedValue<T>;
+  export function useSharedValue<T>(initialValue: T): { value: T };
   export function useAnimatedStyle<T extends object>(updater: () => T): T;
   export function withSpring<T>(
     toValue: T,
@@ -23,31 +19,26 @@ declare module "react-native-reanimated" {
 
 declare module "react-native-gesture-handler" {
   import type { ComponentType, PropsWithChildren, ReactNode } from "react";
-  import type { ViewStyle } from "react-native";
-
-  export interface GestureHandlerRootViewProps {
-    style?: ViewStyle;
-    children?: ReactNode;
-  }
-
-  export const GestureHandlerRootView: ComponentType<GestureHandlerRootViewProps>;
-
-  export interface PanGestureLikeEvent {
+  import type { StyleProp, ViewStyle } from "react-native";
+  type PanEvent = {
     x: number;
     translationX: number;
     translationY: number;
     velocityY: number;
-  }
+  };
+  type PanConfig = {
+    onBegin(cb: (event: PanEvent) => void): PanConfig;
+    onUpdate(cb: (event: PanEvent) => void): PanConfig;
+    onEnd(cb: (event: PanEvent) => void): PanConfig;
+    onFinalize(cb: () => void): PanConfig;
+  };
 
-  export interface PanGestureLikeConfig {
-    onBegin(cb: (event: PanGestureLikeEvent) => void): PanGestureLikeConfig;
-    onUpdate(cb: (event: PanGestureLikeEvent) => void): PanGestureLikeConfig;
-    onEnd(cb: (event: PanGestureLikeEvent) => void): PanGestureLikeConfig;
-    onFinalize(cb: () => void): PanGestureLikeConfig;
-  }
-
+  export const GestureHandlerRootView: ComponentType<{
+    style?: StyleProp<ViewStyle>;
+    children?: ReactNode;
+  }>;
   export const Gesture: {
-    Pan(): PanGestureLikeConfig;
+    Pan(): PanConfig;
     Native(): unknown;
   };
 
@@ -59,10 +50,8 @@ declare module "react-native-gesture-handler" {
 declare module "react-native-svg" {
   import type { ComponentType, PropsWithChildren } from "react";
 
-  type SvgProps = Record<string, unknown>;
-
-  const Svg: ComponentType<PropsWithChildren<SvgProps>>;
-  export const Rect: ComponentType<SvgProps>;
-  export const Path: ComponentType<SvgProps>;
+  const Svg: ComponentType<PropsWithChildren<Record<string, unknown>>>;
+  export const Rect: ComponentType<Record<string, unknown>>;
+  export const Path: ComponentType<Record<string, unknown>>;
   export default Svg;
 }
