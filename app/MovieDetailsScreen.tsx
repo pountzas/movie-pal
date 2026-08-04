@@ -11,21 +11,7 @@ import Animated, {
 import { scheduleOnRN } from "react-native-worklets";
 import axios from "axios";
 
-interface CastMember {
-  id: number;
-  name: string;
-  character: string;
-  profile_path: string | null;
-}
-
-interface CrewMember {
-  id: number;
-  name: string;
-  job: string;
-  profile_path: string | null;
-}
-
-interface MovieDetails {
+interface MovieCredits {
   cast: CastMember[];
   crew: CrewMember[];
 }
@@ -44,11 +30,13 @@ const MovieDetailsScreen = () => {
   const translateX = useSharedValue(0);
   const opacity = useSharedValue(1);
 
-  const [movieDetails, setMovieDetails] = useState<MovieDetails>({
+  const [movieDetails, setMovieDetails] = useState<MovieCredits>({
     cast: [],
     crew: [],
   });
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const voteAverage = Number(movie.vote_average);
 
   const navigateBack = useCallback(() => {
     setTimeout(() => {
@@ -159,10 +147,8 @@ const MovieDetailsScreen = () => {
           <View className="flex flex-row items-center">
             <Text className="text-yellow-500 mr-1">★</Text>
             <Text className="text-gray-700 dark:text-gray-300">
-              {movie.vote_average &&
-              typeof movie.vote_average === "number" &&
-              movie.vote_average > 0
-                ? (movie.vote_average as number).toFixed(1)
+              {Number.isFinite(voteAverage) && voteAverage > 0
+                ? voteAverage.toFixed(1)
                 : "N/A"}
             </Text>
             <Text className="text-gray-500 dark:text-gray-400 ml-1">
@@ -214,7 +200,14 @@ const MovieDetailsScreen = () => {
                       key={`cast-${actor.id}-${index}`}
                       className="mr-9 w-32 items-center active:scale-95"
                       onPress={() => {
-                        // Optional: Add press animation or navigation
+                        router.push({
+                          pathname: "/CastScreen",
+                          params: {
+                            id: String(actor.id),
+                            name: actor.name || "",
+                            profile_path: actor.profile_path || "",
+                          },
+                        });
                       }}
                     >
                       <Image
