@@ -11,18 +11,6 @@ import Animated, {
 import { scheduleOnRN } from "react-native-worklets";
 import axios from "axios";
 
-interface MovieCredits {
-  cast: CastMember[];
-  crew: CrewMember[];
-}
-
-interface EdgePanEvent {
-  x: number;
-  translationX: number;
-  translationY: number;
-  velocityY: number;
-}
-
 const MovieDetailsScreen = () => {
   const movie = useLocalSearchParams();
   const router = useRouter();

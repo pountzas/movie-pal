@@ -35,9 +35,15 @@ interface PersonMovieCredit extends Movie {
   order?: number;
 }
 
+interface PersonCrewCredit extends Movie {
+  credit_id: string;
+  department: string;
+  job: string;
+}
+
 interface PersonMovieCredits {
   cast: PersonMovieCredit[];
-  crew: PersonMovieCredit[];
+  crew: PersonCrewCredit[];
 }
 
 interface PersonDetails {
@@ -56,6 +62,18 @@ interface PersonDetails {
   popularity: number;
   profile_path: string | null;
   movie_credits?: PersonMovieCredits;
+}
+
+interface MovieCredits {
+  cast: CastMember[];
+  crew: CrewMember[];
+}
+
+interface EdgePanEvent {
+  x: number;
+  translationX: number;
+  translationY: number;
+  velocityY: number;
 }
 
 interface MovieStore {
