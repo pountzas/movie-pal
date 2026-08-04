@@ -179,7 +179,7 @@ const MovieDetailsScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <View className="px-8 py-4">
+        <ScrollView className="px-8 py-4">
           <Text className="text-3xl font-semibold dark:text-gray-50 mb-2 animate-fade-in">
             {movie.title}
           </Text>
@@ -325,7 +325,7 @@ const MovieDetailsScreen = () => {
               )}
             </View>
           )}
-        </View>
+        </ScrollView>
       </Animated.ScrollView>
     </GestureDetector>
   );
