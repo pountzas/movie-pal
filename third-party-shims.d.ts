@@ -1,6 +1,6 @@
 declare module "react-native-reanimated" {
   import type { ComponentType } from "react";
-  import type { ScrollViewProps } from "react-native";
+  import type { ScrollViewProps, ViewProps } from "react-native";
 
   export function useSharedValue<T>(initialValue: T): { value: T };
   export function useAnimatedStyle<T extends object>(updater: () => T): T;
@@ -11,6 +11,7 @@ declare module "react-native-reanimated" {
   ): T;
 
   const Animated: {
+    View: ComponentType<ViewProps & { className?: string }>;
     ScrollView: ComponentType<ScrollViewProps & { className?: string }>;
   };
 
@@ -27,6 +28,8 @@ declare module "react-native-gesture-handler" {
     velocityY: number;
   };
   type PanConfig = {
+    activeOffsetX(offset: number | number[]): PanConfig;
+    failOffsetY(offset: number | number[]): PanConfig;
     onBegin(cb: (event: PanEvent) => void): PanConfig;
     onUpdate(cb: (event: PanEvent) => void): PanConfig;
     onEnd(cb: (event: PanEvent) => void): PanConfig;
