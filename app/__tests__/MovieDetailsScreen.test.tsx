@@ -162,8 +162,7 @@ describe("MovieDetailsScreen", () => {
     });
   });
 
-  it("toggles crew visibility when Show/Hide button is pressed", async () => {
-    // Mock crew data in the API response
+  it("always displays crew members when crew data is available", async () => {
     mockedAxios.get.mockResolvedValue({
       data: {
         cast: mockCast,
@@ -180,27 +179,14 @@ describe("MovieDetailsScreen", () => {
 
     render(<MovieDetailsScreen />);
 
-    // Initially crew should not be visible
-    expect(screen.queryByText("Director One")).not.toBeOnTheScreen();
-
-    // Click "Show" to display crew
     await waitFor(() => {
-      const showButton = screen.getByText("Show");
-      fireEvent.press(showButton);
-    });
-
-    // Crew should now be visible
-    await waitFor(() => {
+      expect(screen.getByText("Crew")).toBeOnTheScreen();
       expect(screen.getByText("Director One")).toBeOnTheScreen();
       expect(screen.getByText("Director")).toBeOnTheScreen();
     });
 
-    // Click "Hide" to hide crew
-    const hideButton = screen.getByText("Hide");
-    fireEvent.press(hideButton);
-
-    // Crew should be hidden again
-    expect(screen.queryByText("Director One")).not.toBeOnTheScreen();
+    expect(screen.queryByText("Show")).not.toBeOnTheScreen();
+    expect(screen.queryByText("Hide")).not.toBeOnTheScreen();
   });
 
   it("handles pull-to-refresh functionality", async () => {
