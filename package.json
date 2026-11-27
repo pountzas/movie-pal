@@ -64,30 +64,13 @@
   },
   "overrides": {
     "brace-expansion": "^1.1.21",
-    "decode-uri-component": "^0.5.0",
-    "image-size": "^2.0.3",
     "uuid": "^11.1.1",
     "ws": "^8.20.1",
-    "@expo/cli": {
-      "glob": "^14.0.2"
-    },
-    "@expo/config": {
-      "glob": "^14.0.2"
-    },
-    "@expo/config-plugins": {
-      "glob": "^14.0.2"
-    },
-    "@expo/fingerprint": {
-      "glob": "^14.0.2",
-      "minimatch": "^11.0.1"
-    },
-    "@expo/metro-config": {
-      "glob": "^14.0.2"
-    },
     "glob@13": {
       ".": "^14.0.2",
       "minimatch": "^11.0.1"
-    }
+    },
+    "minimatch@10": "^11.0.1"
   },
   "private": true
 }
